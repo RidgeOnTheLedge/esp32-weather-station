@@ -1,30 +1,40 @@
-#include <temperature_types.h>
 #include <cmath>
 
-TemperatureCategory temperatureClassification(float temperature)
+#include "temperature.h"
+#include "sensorData.h"
+namespace TemperatureClassifications
+{
+  // Temperature thresholds for classification
+  inline constexpr float cold = 0.0f;
+  inline constexpr float cool = 10.0f;
+  inline constexpr float mild = 18.0f;
+  inline constexpr float warm = 27.0f;
+}
+
+SensorData temperatureClassification(float temperature, const std::string& sensorName)
 {
   // Check for valid temperature
   if(!std::isfinite(temperature))
   {
-    return TemperatureCategory::Unknown;
+    return SensorData(temperature, Category::Invalid, sensorName);
   }
 
-  if (temperature < Classifications::cold)
+  if (temperature < TemperatureClassifications::cold)
   {
-    return TemperatureCategory::Cold;
+    return SensorData(temperature, Category::Cold, sensorName);
   }
-  else if (temperature < Classifications::cool)
+  else if (temperature < TemperatureClassifications::cool)
   {
-    return TemperatureCategory::Cool;
+    return SensorData(temperature, Category::Cool, sensorName);
   }
-  else if (temperature < Classifications::mild)
+  else if (temperature < TemperatureClassifications::mild)
   {
-    return TemperatureCategory::Mild;
+    return SensorData(temperature, Category::Mild, sensorName);
   }
-  else if (temperature < Classifications::warm)
+  else if (temperature < TemperatureClassifications::warm)
   {
-    return TemperatureCategory::Warm;
+    return SensorData(temperature, Category::Warm, sensorName);
   }
   
-  return TemperatureCategory::Hot;
+  return SensorData(temperature, Category::Hot, sensorName);
 }
